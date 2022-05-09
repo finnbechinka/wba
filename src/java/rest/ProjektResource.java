@@ -3,6 +3,7 @@ package rest;
 import classes.Projekt;
 import java.io.Serializable;
 import java.net.URI;
+import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
@@ -11,6 +12,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.transaction.HeuristicMixedException;
 import javax.transaction.HeuristicRollbackException;
 import javax.transaction.NotSupportedException;
@@ -72,12 +74,26 @@ public class ProjektResource implements Serializable {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response get(@QueryParam("id") Long id) {
-        Projekt proj = new Projekt();
-        proj.setId(id);
-        proj.setTitel("exampleTitel");
-        ResponseBuilder rb = Response.ok(proj);
+        try {
+            if(id == null){ 
+                Query query = this.em.createNamedQuery("projekt.findAll",Projekt.class);
+                List<Projekt> p = (List<Projekt>) query.getResultList();
+                ResponseBuilder rb = Response.ok(p);
+                
+                return rb.build();
+            }else{
+                Query query = this.em.createNamedQuery("projekt.findById",Projekt.class);
+                query.setParameter("id", id);
+                Projekt p = (Projekt) query.getSingleResult();
+                ResponseBuilder rb = Response.ok(p);
+                
+                return rb.build();
+            }
 
-        return rb.build();
+        } catch (Exception e) {
+            // Better to add a error message here...
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PUT

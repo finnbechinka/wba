@@ -2,6 +2,13 @@ package classes;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Collection;
+import javax.persistence.Entity;
+import javax.persistence.*;
+import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -10,26 +17,40 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author 
  */
 @XmlRootElement
+@Entity
+@Table(name="tbl_Artefakt")
+@NamedQueries({
+    @NamedQuery(name="artefakt.findAll",query="SELECT a FROM Artefakt a"),
+    @NamedQuery(name="artefakt.findById",query="SELECT a FROM Artefakt a WHERE a.id = :id"),
+    @NamedQuery(name="artefakt.findByTitel",query="SELECT a FROM Artefakt a WHERE a.titel = :titel")
+})
 public class Artefakt implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
+    
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
     private String titel;
 
     private String kurzbeschreibung;
     
-    private Long scopeId;
+    @ManyToOne
+    private Aufgabenbereich scope;
+    //private Long scopeId;
+    
+    @ManyToMany
+    private Collection<Projekt> projekt;
     
     private int stunden;
 
-    public Long getScopeId() {
-        return scopeId;
+    public Aufgabenbereich getScopeId() {
+        return scope;
     }
 
-    public void setScopeId(Long scopeId) {
-        this.scopeId = scopeId;
+    public void setScope(Aufgabenbereich scope) {
+        this.scope = scope;
     }
 
     public int getStunden() {
@@ -64,4 +85,13 @@ public class Artefakt implements Serializable {
         this.id = id;
     }
 
+    public Collection<Projekt> getProjekt() {
+        return projekt;
+    }
+
+    public void setProjekt(Collection<Projekt> projekt) {
+        this.projekt = projekt;
+    }
+
+    
 }
