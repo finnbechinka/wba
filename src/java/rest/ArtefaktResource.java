@@ -77,13 +77,13 @@ public class ArtefaktResource implements Serializable {
     public Response get(@QueryParam("id") Long id) {
         try {
             if(id==null){
-                Query query = this.em.createNamedQuery("projekt.findAll",Artefakt.class);
+                Query query = this.em.createNamedQuery("artefakt.findAll",Artefakt.class);
                 List<Artefakt> p = (List<Artefakt>) query.getResultList();
                 ResponseBuilder rb = Response.ok(p);
                 
                 return rb.build();
             }else{
-                Query query = this.em.createNamedQuery("projekt.findById",Artefakt.class);
+                Query query = this.em.createNamedQuery("artefakt.findById",Artefakt.class);
                 query.setParameter("id", id);
                 Artefakt p = (Artefakt) query.getSingleResult();
                 ResponseBuilder rb = Response.ok(p);

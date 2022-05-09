@@ -77,13 +77,13 @@ public class AufgabenbereichResource implements Serializable {
     public Response get(@QueryParam("id") Long id) {
         try {
             if(id==null){
-                Query query = this.em.createNamedQuery("projekt.findAll",Aufgabenbereich.class);
+                Query query = this.em.createNamedQuery("aufgabenbereich.findAll",Aufgabenbereich.class);
                 List<Aufgabenbereich> p = (List<Aufgabenbereich>) query.getResultList();
                 ResponseBuilder rb = Response.ok(p);
                 
                 return rb.build();
             }else{
-                Query query = this.em.createNamedQuery("projekt.findById",Aufgabenbereich.class);
+                Query query = this.em.createNamedQuery("aufgabenbereich.findById",Aufgabenbereich.class);
                 query.setParameter("id", id);
                 Aufgabenbereich p = (Aufgabenbereich) query.getSingleResult();
                 ResponseBuilder rb = Response.ok(p);
