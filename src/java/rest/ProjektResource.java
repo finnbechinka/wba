@@ -58,10 +58,10 @@ public class ProjektResource implements Serializable {
             this.em.persist(proj);          // em speichert in die Tabelle
             this.utx.commit();
             
-            URI location = URI.create("/project?id=" + proj.getId());  // hier kann man das angelegte abrufen
+            URI location = URI.create("/wba/api/project?id=" + proj.getId());  // hier kann man das angelegte abrufen
             ResponseBuilder rb = Response.created(location);   // response 201 für cerated
             // Example for createing a HATEOAS link
-            URI delLocLink = URI.create("/project/delete?id=" + proj.getId()); //hier kann man das angelegte löschen
+            URI delLocLink = URI.create("/wba/api/project/delete?id=" + proj.getId()); //hier kann man das angelegte löschen
             rb.link(delLocLink, "delete");
             return rb.build();
 
